@@ -26,17 +26,17 @@ async def start_bot(bot, m):
 @Client.on_callback_query()
 async def _clback(bot,update):
   if update.data == "help":
-     update.message.edit(
+     await update.message.edit(
        text=Help,
        reply_markup=InlineKeyboardMarkup([[Btn("Back",data="home")]])
      )
   elif update.data == "commands":
-    update.message.edit(
+    await update.message.edit(
        text=Commands,
        reply_markup=InlineKeyboardMarkup([[Btn("Back",data="home")]])
     )
   elif update.data == "home":
-    update.message.edit(
+    await update.message.edit(
        text=Start,
        reply_markup=InlineKeyboardMarkup([[Btn("HELP",data="help"),Btn("COMMANDS",data="commands")]])
     )
