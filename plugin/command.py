@@ -4,7 +4,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import UserNotParticipant
 
 @Client.on_message(filters.command("start") & filters.private,)
-async def start_bot(bot, m: Message):
+async def start_bot(bot, m):
   #bot.send_message(start)
   inline_keyboard=[
   InlineKeyboardButton("HELP",callback_data="HELP"),
