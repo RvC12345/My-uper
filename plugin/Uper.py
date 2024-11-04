@@ -10,6 +10,8 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from urllib.parse import urlparse
 from config import Config
+from moviepy.editor import VideoFileClip
+from PIL import Image
 
 AuthU = Config.AUTH_USERS
 
@@ -98,6 +100,12 @@ async def upload_file(client, message, file_path):
         if metadata is not None:
             if metadata.has("duration"):
                 duration = metadata.get('duration').seconds
+                time_in_seconds=3
+                thumb_path="thumb.jpg"
+                with VideoFileClip(file_path) as video:
+                      frame = video.get_frame(time_in_seconds)
+                      img = Image.fromarray(frame)
+                      img.save(thumb_path)
                 await client.send_video(
                     chat_id=message.chat.id,
                     video=file_path,
@@ -105,6 +113,8 @@ async def upload_file(client, message, file_path):
                     duration=duration,
                     progress=progress,
                   )
+                if os.path.exists(thumb_path):
+                     os.remove(thumb_path)
     else:
         await client.send_document(
            chat_id=message.chat.id,
