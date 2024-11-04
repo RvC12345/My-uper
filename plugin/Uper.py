@@ -92,7 +92,7 @@ async def upload_file(client, message, file_path):
        xfiletype = file_name
        print("Err on Making file name")
     if xfiletype in ['video/mp4', 'video/x-matroska', 'video/webm']:
-        metadata = extractMetadata(createParser(dldir))
+        metadata = extractMetadata(createParser(file_path))
         if metadata is not None:
             if metadata.has("duration"):
                 duration = metadata.get('duration').seconds
