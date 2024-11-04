@@ -88,6 +88,7 @@ async def upload_file(client, message, file_path):
        xfiletype = file.mime
     except AttributeError:
        xfiletype = file_name
+       print("Err on Making file name")
     if xfiletype in ['video/mp4', 'video/x-matroska', 'video/webm']:
         metadata = extractMetadata(createParser(dldir))
           if metadata is not None:
