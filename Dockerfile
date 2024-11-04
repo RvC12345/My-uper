@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Set  variables for Pyrogram (optional)
 # Command to run the bot
-CMD ["python", "bot.py"]
+CMD gunicorn app:app & python3 bot.py
