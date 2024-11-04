@@ -13,7 +13,8 @@ API_HASH = os.environ.get("apihash")
 BOT_TOKEN = os.environ.get("tk")
 AuthU=int(os.environ.get("auth"))
 
-app = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+app = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN,workers=10,plugins=dict(root="plugin"))
+
 
 # Progress bar function to create visual progress with 10 blocks
 def create_progress_bar(progress):
