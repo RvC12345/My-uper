@@ -50,7 +50,7 @@ def download_file(client, url, output_path, message):
                     # Update message with download progress
                     message_text = f"🔰**Downloading...📥**\n\n [{bar}]\n\n➡️Percentage: {progress}%\n➡️ETA: {eta_formatted}"
                     asyncio.run_coroutine_threadsafe(
-                    await client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text),
+                        client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text),
                         client.loop
                     )
 
