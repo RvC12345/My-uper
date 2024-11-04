@@ -52,7 +52,7 @@ def download_file(url, output_path, message: Message):
 
 # Function to upload file with progress update
 async def upload_file(client, message, file_path):
-    file_size = message.reply_to_message.document.file_size if message.reply_to_message.document else 0
+    #file_size = message.reply_to_message.document.file_size if message.reply_to_message.document else 0
     uploaded = 0
     start_time = time.time()
 
