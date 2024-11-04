@@ -8,6 +8,8 @@ class Config(object):
     API_HASH = os.environ.get("apihash")
     # Get these values from my.telegram.org
     # Array to store users who are authorized to use the bot
+    seedr_un = os.environ.get("sun")
+    seedr_pw = os.environ.get("spw")
     AUTH_USERS = set(int(x) for x in os.environ.get("auth").split())
     # the download location, where the HTTP Server runs
     DOWNLOAD_LOCATION = "./DOWNLOADS"
