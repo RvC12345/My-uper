@@ -9,7 +9,9 @@ from datetime import timedelta
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from urllib.parse import urlparse
+from config import Config
 
+AuthU = Config.AUTH_USERS
 
 # Progress bar function to create visual progress with 10 blocks
 def create_progress_bar(progress):
