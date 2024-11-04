@@ -55,24 +55,27 @@ async def upload_file(client, message, file_path):
     #file_size = message.reply_to_message.document.file_size if message.reply_to_message.document else 0
     uploaded = 0
     start_time = time.time()
-
+    last_update = 0
     def progress(current, total):
         nonlocal uploaded
+        nonlocal last_update
         uploaded = current
         
         # Calculate upload progress
         progress = int((uploaded / total) * 100)
-        bar = create_progress_bar(progress)
+        if progress >= last_update + 10:
+           last_update = progress // 10 * 10  # Round to the nearest 10%
+           bar = create_progress_bar(progress)
         
         # Calculate ETA
-        elapsed_time = time.time() - start_time
-        eta = (elapsed_time / uploaded) * (total - uploaded) if uploaded > 0 else 0
-        eta_formatted = str(timedelta(seconds=int(eta)))
+           elapsed_time = time.time() - start_time
+           eta = (elapsed_time / uploaded) * (total - uploaded) if uploaded > 0 else 0
+           eta_formatted = str(timedelta(seconds=int(eta)))
 
         # Update message with upload progress
-        message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
-        client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
-
+           message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
+           client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
+  
     # Send the file with progress callback
     await client.send_document(
         chat_id=message.chat.id,
