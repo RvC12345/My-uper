@@ -49,10 +49,10 @@ def download_file(client, url, output_path, message):
 
                     # Update message with download progress
                     message_text = f"🔰**Downloading...📥**\n\n [{bar}]\n\n➡️Percentage: {progress}%\n➡️ETA: {eta_formatted}"
-                    #asyncio.run_coroutine_threadsafe(
-                    await client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)#,
-                        #client.loop
-                    #)
+                    asyncio.run_coroutine_threadsafe(
+                    await client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text),
+                        client.loop
+                    )
 
 # Function to upload file with progress update
 async def upload_file(client, message, file_path):
@@ -82,8 +82,10 @@ async def upload_file(client, message, file_path):
 
         # Update message with upload progress
            message_text = f"**🔰Uploading...🚀**\n\n [{bar}]\n\n➡️Percentage: {progress}%\n➡️ETA: {eta_formatted}"
-           await client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
-  
+           asyncio.run_coroutine_threadsafe(
+             client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text),
+             client.loop
+           )
     # Send the file with progress callback
     try:
        file = filetype.guess(file_path)
