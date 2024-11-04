@@ -48,7 +48,7 @@ def download_file(url, output_path, message: Message):
 
                     # Update message with download progress
                     message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
-                    app.edit_message_text(chat_id=message.chat.id, message_id=message.message_id, text=message_text)
+                    app.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
 
 # Function to upload file with progress update
 async def upload_file(client, message, file_path):
@@ -71,7 +71,7 @@ async def upload_file(client, message, file_path):
 
         # Update message with upload progress
         message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
-        client.edit_message_text(chat_id=message.chat.id, message_id=message.message_id, text=message_text)
+        client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
 
     # Send the file with progress callback
     await client.send_document(
