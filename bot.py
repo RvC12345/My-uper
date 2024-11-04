@@ -4,6 +4,8 @@ from datetime import timedelta
 from pyrogram import Client, filters
 from pyrogram.types import Message
 import asyncio
+from text import Start,Help,Commands
+
 
 # Replace these with your own bot credentials
 API_ID = os.environ.get("apiid")
