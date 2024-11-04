@@ -97,7 +97,7 @@ async def upload_file(client, message, file_path):
             if metadata.has("duration"):
                 duration = metadata.get('duration').seconds
                 await client.send_video(
-                    chat_id=mesaage.chat.id,
+                    chat_id=message.chat.id,
                     video=file_path,
                     caption=file_name,
                     duration=duration,
