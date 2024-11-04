@@ -124,7 +124,7 @@ async def url_upload_handler(client, message):
 
 
     # Initial message
-    progress_message = await message.reply("**Starting download..."**)
+    progress_message = await message.reply("**Starting download...**")
 
     # Download the file
     download_file(client, url, output_path, progress_message)
