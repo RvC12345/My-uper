@@ -19,7 +19,7 @@ def create_progress_bar(progress):
     return bar
 
 # Function to download file with progress update
-def download_file(client, url, output_path, message: Message):
+def download_file(client, url, output_path, message):
     response = requests.get(url, stream=True)
     total_size = int(response.headers.get('content-length', 0))
     downloaded = 0
