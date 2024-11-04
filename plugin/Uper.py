@@ -115,7 +115,7 @@ async def url_upload_handler(client, message):
   if message.chat.id not in AuthU:
     await message.reply("You are not my auther")
   else:
-    url = message.text.split(" ", 1)[1] if len(message.text.split()) > 1 else None
+    url = message.text #.split(" ", 1)[1] if len(message.text.split()) > 1 else None
     if not url:
         await message.reply("Please provide a URL to upload.")
         return 
