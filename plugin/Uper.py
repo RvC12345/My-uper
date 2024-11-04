@@ -4,9 +4,11 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import UserNotParticipant
 import asyncio
 import requests
-import os,time
+import os,time,filetype
 from datetime import timedelta
-
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
+from urllib.parse import urlparse
 
 
 # Progress bar function to create visual progress with 10 blocks
@@ -44,7 +46,7 @@ def download_file(client, url, output_path, message: Message):
                     eta_formatted = str(timedelta(seconds=int(eta)))
 
                     # Update message with download progress
-                    message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
+                    message_text = f"🔰Downloading...📥\n\n [{bar}]\n\n➡️Percentage: {progress}%\n➡️ETA: {eta_formatted}"
                     asyncio.run_coroutine_threadsafe(
                         client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text),
                         client.loop
@@ -56,6 +58,10 @@ async def upload_file(client, message, file_path):
     uploaded = 0
     start_time = time.time()
     last_update = 0
+    if "?" in file_path:
+        file_path = file_path.split("?")[0]
+    #filetype=file_path.split(".")[1]  
+    file_name=file_path.split(".")[0]
     def progress(current, total):
         nonlocal uploaded
         nonlocal last_update
@@ -73,15 +79,33 @@ async def upload_file(client, message, file_path):
            eta_formatted = str(timedelta(seconds=int(eta)))
 
         # Update message with upload progress
-           message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
+           message_text = f"**🔰Uploading...🚀**\n\n [{bar}]\n\n➡️Percentage: {progress}%\n➡️ETA: {eta_formatted}"
            client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
   
     # Send the file with progress callback
-    await client.send_document(
-        chat_id=message.chat.id,
-        document=file_path,
-        progress=progress,
-    )
+    try:
+       file = filetype.guess(file_path)
+       xfiletype = file.mime
+    except AttributeError:
+       xfiletype = file_name
+    if xfiletype in ['video/mp4', 'video/x-matroska', 'video/webm']:
+        metadata = extractMetadata(createParser(dldir))
+          if metadata is not None:
+              if metadata.has("duration"):
+                duration = metadata.get('duration').seconds
+                await bot.send_video(
+                    chat_id=mesaage.chat.id,
+                    video=file_path,
+                    caption=file_name,
+                    duration=duration,
+                    progress=progress,
+                  )
+    else:
+        await client.send_document(
+           chat_id=message.chat.id,
+           document=file_path,
+           progress=progress,
+       )
 
 # Command handler to start URL download and upload
 @Client.on_message(filters.regex(pattern=".*http.*"))
@@ -95,19 +119,20 @@ async def url_upload_handler(client, message):
         await message.reply("Please provide a URL to upload.")
         return 
     # Temporary file path
-    output_path = "downloaded_file"
+    output_path = urlparse(url).path.split('/')[-1]
+
 
     # Initial message
-    progress_message = await message.reply("Starting download...")
+    progress_message = await message.reply("**Starting download..."**)
 
     # Download the file
     download_file(client, url, output_path, progress_message)
 
     # Upload the file
-    await progress_message.edit_text("Download complete. Starting upload...")
+    await progress_message.edit_text("**Download complete.\nStarting upload...**")
     await upload_file(client, progress_message, output_path)
 
     # Cleanup: Delete the local file after upload
     os.remove(output_path)
-    await progress_message.edit_text("Upload complete!")
+    await progress_message.edit_text("**Upload complete!**")
 
