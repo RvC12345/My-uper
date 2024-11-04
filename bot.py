@@ -20,7 +20,7 @@ def create_progress_bar(progress):
     return bar
 
 # Function to download file with progress update
-def download_file(url, output_path, message: Message):
+def download_file(client, url, output_path, message: Message):
     response = requests.get(url, stream=True)
     total_size = int(response.headers.get('content-length', 0))
     downloaded = 0
@@ -48,7 +48,7 @@ def download_file(url, output_path, message: Message):
 
                     # Update message with download progress
                     message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
-                    app.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
+                    client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
 
 # Function to upload file with progress update
 async def upload_file(client, message, file_path):
@@ -99,7 +99,7 @@ async def url_upload_handler(client, message):
     progress_message = await message.reply("Starting download...")
 
     # Download the file
-    download_file(url, output_path, progress_message)
+    await download_file(client, url, output_path, progress_message)
 
     # Upload the file
     await progress_message.edit_text("Download complete. Starting upload...")
