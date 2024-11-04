@@ -7,8 +7,10 @@ from pyrogram.errors import UserNotParticipant
 async def start_bot(bot, m):
   #bot.send_message(start)
   inline_keyboard=[
-  InlineKeyboardButton("HELP",callback_data="HELP"),
-  InlineKeyboardButton("COMMANDS",callback_data="Commands")
+        [
+    InlineKeyboardButton("HELP",callback_data="HELP"),
+    InlineKeyboardButton("COMMANDS",callback_data="Commands")
+        ]
     ]
   reply_markup = InlineKeyboardMarkup(inline_keyboard)
   await bot.send_message(
