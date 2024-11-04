@@ -3,6 +3,7 @@ import os,time
 from datetime import timedelta
 from pyrogram import Client, filters
 from pyrogram.types import Message
+import asyncio
 
 # Replace these with your own bot credentials
 API_ID = os.environ.get("apiid")
@@ -48,7 +49,10 @@ def download_file(client, url, output_path, message: Message):
 
                     # Update message with download progress
                     message_text = f"[{bar}]\nPercentage: {progress}%\nETA: {eta_formatted}"
-                    client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text)
+                    asyncio.run_coroutine_threadsafe(
+                        client.edit_message_text(chat_id=message.chat.id, message_id=message.id, text=message_text),
+                        client.loop
+                    )
 
 # Function to upload file with progress update
 async def upload_file(client, message, file_path):
@@ -99,7 +103,7 @@ async def url_upload_handler(client, message):
     progress_message = await message.reply("Starting download...")
 
     # Download the file
-    await download_file(client, url, output_path, progress_message)
+    download_file(client, url, output_path, progress_message)
 
     # Upload the file
     await progress_message.edit_text("Download complete. Starting upload...")
